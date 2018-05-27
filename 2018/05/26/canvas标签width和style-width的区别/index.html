@@ -79,15 +79,18 @@
 
 
 
+<meta name="description" content="Canvas大小的修改有三种方法： 方法一： 通过CSS样式来控制canvas元素，具体代码如下：  1canvas &amp;#123; width: 600px; height: 300px&amp;#125; 方法二： 直接在canvas标签内定义width和height，具体代码如下： 1&amp;lt;canvas width=&apos;600&apos; height=&apos;300&apos;&amp;gt;&amp;lt;/canvas&amp;gt; 方法三：">
 <meta name="keywords" content="html,css">
 <meta property="og:type" content="article">
 <meta property="og:title" content="canvas标签width和style.width的区别">
 <meta property="og:url" content="http://yoursite.com/2018/05/26/canvas标签width和style-width的区别/index.html">
 <meta property="og:site_name" content="随手小记">
+<meta property="og:description" content="Canvas大小的修改有三种方法： 方法一： 通过CSS样式来控制canvas元素，具体代码如下：  1canvas &amp;#123; width: 600px; height: 300px&amp;#125; 方法二： 直接在canvas标签内定义width和height，具体代码如下： 1&amp;lt;canvas width=&apos;600&apos; height=&apos;300&apos;&amp;gt;&amp;lt;/canvas&amp;gt; 方法三：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-26T12:48:43.743Z">
+<meta property="og:updated_time" content="2018-05-27T11:30:02.294Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="canvas标签width和style.width的区别">
+<meta name="twitter:description" content="Canvas大小的修改有三种方法： 方法一： 通过CSS样式来控制canvas元素，具体代码如下：  1canvas &amp;#123; width: 600px; height: 300px&amp;#125; 方法二： 直接在canvas标签内定义width和height，具体代码如下： 1&amp;lt;canvas width=&apos;600&apos; height=&apos;300&apos;&amp;gt;&amp;lt;/canvas&amp;gt; 方法三：">
 
 
 
@@ -365,7 +368,17 @@
       
 
       
-        
+        <p>Canvas大小的修改有三种方法：</p>
+<p>方法一： 通过CSS样式来控制canvas元素，具体代码如下：</p>
+ <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">canvas</span> &#123; <span class="attribute">width</span>: <span class="number">600px</span>; <span class="attribute">height</span>: <span class="number">300px</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>方法二： 直接在canvas标签内定义width和height，具体代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">width</span>=<span class="string">'600'</span> <span class="attr">height</span>=<span class="string">'300'</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>方法三： 在JS代码里面设置width和height， 在var ctx = myCanvas.getContext(‘2d’) 后面追加如下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myCanvas.width = <span class="number">600</span>;</span><br><span class="line">myCanvas.height = <span class="number">300</span>;</span><br></pre></td></tr></table></figure>
+<p>设置canvas标签css的width属性，和直接设置canvas的width属性，结果是不一样的。原因如下：</p>
+<p>canvas标签包含元素本身以及元素绘图表面，它们各自有自己的尺寸大小。当直接设置canvas标签的width时，会同时改变元素本身的大小和元素绘图表面的大小，此时，显示效果不发生改变(只有等比例变化)；设置canvas css中width的属性时，只改变canvas本身的大小，而不改变元素绘图表面的大小，此时，元素绘图表面为适应canvas元素的尺寸，会进行拉伸或缩小，导致显示效果变化。</p>
+<p> 感谢 ‘<a href="https://www.cnblogs.com/regina1123/p/6234719.html&#39;" target="_blank" rel="noopener">https://www.cnblogs.com/regina1123/p/6234719.html&#39;</a></p>
+
       
     </div>
     
