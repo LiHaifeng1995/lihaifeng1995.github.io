@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="H5直播,低延时,H264,视频,高清," />
+  <meta name="keywords" content="H5直播,低延时,H264,高清,视频," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="天坑一号 此篇主要介绍博主在开发基于MSE方案的直播项目中，进行的策略优化。">
-<meta name="keywords" content="H5直播,低延时,H264,视频,高清">
+<meta name="description" content="此篇主要介绍博主在开发基于MSE方案的直播项目中，进行的策略优化。 在近期的一个项目中，需要使用MSE进行视频的播放。相关资料本就少，完整参考仅有一份官方的英文文档。因此，笔者踩了很多坑，才将此项目完善。最初遇到的问题，大致分为以下几个：   偶尔出现回退现象  进度条显示时间和实际不一致  视频卡顿，无明显规律  延时过大(超过1秒)     时间戳第一个问题主要是由于未打入时间戳引起(fmp4">
+<meta name="keywords" content="H5直播,低延时,H264,高清,视频">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MSE直播方案调优">
 <meta property="og:url" content="http://yoursite.com/2018/06/07/MSE直播方案调优/index.html">
 <meta property="og:site_name" content="随手小记">
-<meta property="og:description" content="天坑一号 此篇主要介绍博主在开发基于MSE方案的直播项目中，进行的策略优化。">
+<meta property="og:description" content="此篇主要介绍博主在开发基于MSE方案的直播项目中，进行的策略优化。 在近期的一个项目中，需要使用MSE进行视频的播放。相关资料本就少，完整参考仅有一份官方的英文文档。因此，笔者踩了很多坑，才将此项目完善。最初遇到的问题，大致分为以下几个：   偶尔出现回退现象  进度条显示时间和实际不一致  视频卡顿，无明显规律  延时过大(超过1秒)     时间戳第一个问题主要是由于未打入时间戳引起(fmp4">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-07T14:38:29.024Z">
+<meta property="og:updated_time" content="2018-06-11T14:32:31.155Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MSE直播方案调优">
-<meta name="twitter:description" content="天坑一号 此篇主要介绍博主在开发基于MSE方案的直播项目中，进行的策略优化。">
+<meta name="twitter:description" content="此篇主要介绍博主在开发基于MSE方案的直播项目中，进行的策略优化。 在近期的一个项目中，需要使用MSE进行视频的播放。相关资料本就少，完整参考仅有一份官方的英文文档。因此，笔者踩了很多坑，才将此项目完善。最初遇到的问题，大致分为以下几个：   偶尔出现回退现象  进度条显示时间和实际不一致  视频卡顿，无明显规律  延时过大(超过1秒)     时间戳第一个问题主要是由于未打入时间戳引起(fmp4">
 
 
 
@@ -304,8 +304,8 @@
 			
 			  <span class="post-updated">
 				&nbsp; | &nbsp; 更新于
-				<time itemprop="dateUpdated" datetime="2018-06-07T22:38:29+08:00" content="2018-06-07">
-				  2018-06-07
+				<time itemprop="dateUpdated" datetime="2018-06-11T22:32:31+08:00" content="2018-06-11">
+				  2018-06-11
 				</time>
 			  </span>
 			
@@ -386,8 +386,43 @@
       
 
       
-        <p>天坑一号</p>
-<p><more><br>此篇主要介绍博主在开发基于MSE方案的直播项目中，进行的策略优化。</more></p>
+        <p>此篇主要介绍博主在开发基于MSE方案的直播项目中，进行的策略优化。</p>
+<p>在近期的一个项目中，需要使用MSE进行视频的播放。相关资料本就少，完整参考仅有一份官方的英文文档。因此，笔者踩了很多坑，才将此项目完善。最初遇到的问题，大致分为以下几个：</p>
+<blockquote>
+<ol>
+<li><p>偶尔出现回退现象</p>
+</li>
+<li><p>进度条显示时间和实际不一致</p>
+</li>
+<li><p>视频卡顿，无明显规律</p>
+</li>
+<li><p>延时过大(超过1秒)</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="时间戳"><a href="#时间戳" class="headerlink" title=" 时间戳"></a> 时间戳</h2><p>第一个问题主要是由于未打入时间戳引起(fmp4好像有两种封装格式，另一种不需要打入时间戳，但是要保证传输的顺序)，导致MSE不能正确识别播放顺序，在打入时间戳后，不再出现这个问题，但是出现了下一个，心累。。。。。。。</p>
+<h2 id="frameDuration-baseMediaDecodeTime"><a href="#frameDuration-baseMediaDecodeTime" class="headerlink" title="frameDuration baseMediaDecodeTime"></a>frameDuration baseMediaDecodeTime</h2><p>在花了很久时间搞清楚frameDuration和baseMediaDecodeTime的含义后（楼主对之前对音视频方面是0基础的小白，网上的资料只简单的翻译了一下，都是泪），把这两个参数打入到封装FMP4的接口后，出现了进度条显示时间和实际不一致的问题，具体表现为播放视频10秒，进度条只走了1秒，video.currentTime中表现也如此。最终，把baseMediaDecodeTime的值*10才正常的显示(直到现在也没搞懂原因，捂脸)。</p>
+<h2 id="缓存控制"><a href="#缓存控制" class="headerlink" title="缓存控制"></a>缓存控制</h2><p>在解决了以上两个问题后，出现了最麻烦的问题，经常性的出现视频的卡顿，并且有时能跳秒追上，大部分时候不能够追上。查阅N篇资料后，一直没有头绪，最后，感谢同项目组的一位大佬，帮助我找出了问题。原因很简单，网上对于MSE的教程中有这么一段代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">this</span>.sourceBuffer.updating)&#123;<span class="comment">//上一块数据还在添加中</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当sourceBuffer处于updating的状态时，直接返回了，返回了…..导致了该数据块直接丢失，其中包含N个帧。类似代码在网上各种教程中泛滥，几乎都是这么写，误导了多少小白- - 一言难尽。</p>
+<p>解决方案如下：</p>
+<p>在此处添加一个buffer，用于存储外部传入的数据块。当sourceBuffer处于updating的状态，先将数据传入buffer中，之后，每次updateend时，从该buffer中取出数据传入SourceBuffer中，若为空，则直接等待外部数据传入(今天写这篇文章时，发现stackoverflow上已经有<a href="https://stackoverflow.com/questions/28815529/mediasource-uncaught-invalidstateerror-failed-to-execute-appendbuffer-on-so" target="_blank" rel="noopener">此方法</a>，之前看到英文不想读)。具体代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">待填坑</span><br></pre></td></tr></table></figure>
+<h2 id="跳秒解决延时问题"><a href="#跳秒解决延时问题" class="headerlink" title="跳秒解决延时问题"></a>跳秒解决延时问题</h2><p>在该项目中，最初播放延时有3秒左右，无奈领导要求必须控制在1秒内，只能想办法解决。</p>
+<p>解决延时问题，主要有以下几种方法：</p>
+<blockquote>
+<ol>
+<li><p>无缓存</p>
+</li>
+<li><p>控制播放速度，缓存较大时增大倍速</p>
+</li>
+<li><p>跳秒</p>
+</li>
+</ol>
+</blockquote>
+<p>第一种，对于MSE好像不能实现，MSE必须要有缓存机制(如果我说错了，欢迎指正)，因此，第一个方法直接放弃。</p>
+<p>第二种，尝试过，但是，当currentTime和souceBuffer.buffered.end(0)的差值很小时，视频会出现明显的卡顿，需要等待一段时间才能继续播放，因此，使用控制倍速的方式，会出现快放–卡顿–快放–卡顿不断循环的过程。</p>
+<p>第三种，<br>待补坑，明天写。。。。。</p>
 
       
     </div>
@@ -440,9 +475,9 @@
           
             <a href="/tags/H264/" rel="tag"><i class="fa fa-tag"></i>H264</a>
           
-            <a href="/tags/视频/" rel="tag"><i class="fa fa-tag"></i>视频</a>
-          
             <a href="/tags/高清/" rel="tag"><i class="fa fa-tag"></i>高清</a>
+          
+            <a href="/tags/视频/" rel="tag"><i class="fa fa-tag"></i>视频</a>
           
         </div>
       
@@ -519,8 +554,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -584,6 +628,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#时间戳"><span class="nav-number">1.</span> <span class="nav-text"> 时间戳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#frameDuration-baseMediaDecodeTime"><span class="nav-number">2.</span> <span class="nav-text">frameDuration baseMediaDecodeTime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存控制"><span class="nav-number">3.</span> <span class="nav-text">缓存控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳秒解决延时问题"><span class="nav-number">4.</span> <span class="nav-text">跳秒解决延时问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
