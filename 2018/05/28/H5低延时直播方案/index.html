@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="H5直播,低延时,H264,视频,H265," />
+  <meta name="keywords" content="H5直播,低延时,H264,H265,视频," />
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="本文主要比较几种常用的直播方案，以及笔者在项目开发中使用过的方案，具体细节不做分析。">
-<meta name="keywords" content="H5直播,低延时,H264,视频,H265">
+<meta name="keywords" content="H5直播,低延时,H264,H265,视频">
 <meta property="og:type" content="article">
 <meta property="og:title" content="H5低延时直播方案">
 <meta property="og:url" content="http://yoursite.com/2018/05/28/H5低延时直播方案/index.html">
@@ -88,7 +88,7 @@
 <meta property="og:description" content="本文主要比较几种常用的直播方案，以及笔者在项目开发中使用过的方案，具体细节不做分析。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/HLSandRTMP.jpg">
-<meta property="og:updated_time" content="2018-05-29T14:19:14.296Z">
+<meta property="og:updated_time" content="2018-07-08T14:39:26.725Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="H5低延时直播方案">
 <meta name="twitter:description" content="本文主要比较几种常用的直播方案，以及笔者在项目开发中使用过的方案，具体细节不做分析。">
@@ -306,8 +306,8 @@
 			
 			  <span class="post-updated">
 				&nbsp; | &nbsp; 更新于
-				<time itemprop="dateUpdated" datetime="2018-05-29T22:19:14+08:00" content="2018-05-29">
-				  2018-05-29
+				<time itemprop="dateUpdated" datetime="2018-07-08T22:39:26+08:00" content="2018-07-08">
+				  2018-07-08
 				</time>
 			  </span>
 			
@@ -326,6 +326,17 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Javascript/" itemprop="url" rel="index">
                     <span itemprop="name">Javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Javascript/直播/" itemprop="url" rel="index">
+                    <span itemprop="name">直播</span>
                   </a>
                 </span>
 
@@ -394,7 +405,7 @@
 <p>如上两种方案已支持大部分的使用场景，但是，在对实时性要求更高的应用场景，例如，视频监控等，上面两种协议也不能够满足使用要求。下面介绍两种延时更低的方案：</p>
 <h1 id="RTSP"><a href="#RTSP" class="headerlink" title="RTSP"></a>RTSP</h1><p> RTSP（实时流协议，Real Time Streaming Protocol）是由Real Network和Netscape共同提出的如何有效地在IP网络上传输流媒体数据的应用层协议。RTSP对流媒体提供了诸如暂停，快进等控制，而它本身并不传输数据，RTSP的作用相当于流媒体服务器的远程控制。</p>
 <p> 基于RTSP协议，我们可以使用RTP（实时传输协议，Real-time Transport Protocol）来进行流媒体数据的传输，RTP协议具有极低的延时性。在浏览器收到RTP数据包后，视频解析阶段我们可以采用如下两种方案：</p>
-<h2 id="FFMPEG-WEBGL"><a href="#FFMPEG-WEBGL" class="headerlink" title=" FFMPEG + WEBGL"></a> FFMPEG + WEBGL</h2><p>FFmpeg是一套开源程序，它提供了录制、转换以及流化音视频的完整解决方案。我们可以使用<a href="https://www.zhihu.com/question/25483589" target="_blank" rel="noopener">asm</a>或者<a href="https://blog.csdn.net/zhangzq86/article/details/61195685" target="_blank" rel="noopener">wasm</a>将FFmpeg转为可在浏览器执行的解码库，通过FFMpeg将经由RTP协议传输的视频数据转码，并通过WEBGL绘制。</p>
+<h2 id="FFMPEG-WEBGL"><a href="#FFMPEG-WEBGL" class="headerlink" title="FFMPEG + WEBGL"></a>FFMPEG + WEBGL</h2><p>FFmpeg是一套开源程序，它提供了录制、转换以及流化音视频的完整解决方案。我们可以使用<a href="https://www.zhihu.com/question/25483589" target="_blank" rel="noopener">asm</a>或者<a href="https://blog.csdn.net/zhangzq86/article/details/61195685" target="_blank" rel="noopener">wasm</a>将FFmpeg转为可在浏览器执行的解码库，通过FFMpeg将经由RTP协议传输的视频数据转码，并通过WEBGL绘制。</p>
 <p>使用此种方案有以下优缺点：</p>
 <blockquote>
 <ol>
@@ -460,9 +471,9 @@
           
             <a href="/tags/H264/" rel="tag"><i class="fa fa-tag"></i>H264</a>
           
-            <a href="/tags/视频/" rel="tag"><i class="fa fa-tag"></i>视频</a>
-          
             <a href="/tags/H265/" rel="tag"><i class="fa fa-tag"></i>H265</a>
+          
+            <a href="/tags/视频/" rel="tag"><i class="fa fa-tag"></i>视频</a>
           
         </div>
       
@@ -568,7 +579,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -579,7 +590,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -590,7 +601,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -623,7 +634,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HLS"><span class="nav-number">1.</span> <span class="nav-text"> HLS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RTMP"><span class="nav-number">2.</span> <span class="nav-text">RTMP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RTSP"><span class="nav-number">3.</span> <span class="nav-text">RTSP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FFMPEG-WEBGL"><span class="nav-number">3.1.</span> <span class="nav-text"> FFMPEG + WEBGL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MSE"><span class="nav-number">3.2.</span> <span class="nav-text">MSE</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HLS"><span class="nav-number">1.</span> <span class="nav-text"> HLS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RTMP"><span class="nav-number">2.</span> <span class="nav-text">RTMP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RTSP"><span class="nav-number">3.</span> <span class="nav-text">RTSP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FFMPEG-WEBGL"><span class="nav-number">3.1.</span> <span class="nav-text">FFMPEG + WEBGL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MSE"><span class="nav-number">3.2.</span> <span class="nav-text">MSE</span></a></li></ol></li></ol></div>
             
 
           </div>
