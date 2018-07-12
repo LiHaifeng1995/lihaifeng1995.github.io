@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="H5直播,低延时,H264,高清,视频," />
+  <meta name="keywords" content="H5直播,低延时,H264,视频,高清," />
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="不同于普通的网站直播，视频监控领域的直播需要支持各种参数，对实时性的要求也更高，因此，视频监控需要采用更加复杂的解决方案。">
-<meta name="keywords" content="H5直播,低延时,H264,高清,视频">
+<meta name="keywords" content="H5直播,低延时,H264,视频,高清">
 <meta property="og:type" content="article">
 <meta property="og:title" content="视频监控领域无插件播放完整解决方案">
 <meta property="og:url" content="http://yoursite.com/2018/06/07/视频监控领域无插件播放完整解决方案/index.html">
 <meta property="og:site_name" content="随手小记">
 <meta property="og:description" content="不同于普通的网站直播，视频监控领域的直播需要支持各种参数，对实时性的要求也更高，因此，视频监控需要采用更加复杂的解决方案。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-10T14:43:03.444Z">
+<meta property="og:updated_time" content="2018-07-12T13:54:42.709Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="视频监控领域无插件播放完整解决方案">
 <meta name="twitter:description" content="不同于普通的网站直播，视频监控领域的直播需要支持各种参数，对实时性的要求也更高，因此，视频监控需要采用更加复杂的解决方案。">
@@ -304,8 +304,8 @@
 			
 			  <span class="post-updated">
 				&nbsp; | &nbsp; 更新于
-				<time itemprop="dateUpdated" datetime="2018-07-10T22:43:03+08:00" content="2018-07-10">
-				  2018-07-10
+				<time itemprop="dateUpdated" datetime="2018-07-12T21:54:42+08:00" content="2018-07-12">
+				  2018-07-12
 				</time>
 			  </span>
 			
@@ -386,38 +386,61 @@
       
 
       
-        <p>不同于普通的网站直播，视频监控领域的直播需要支持各种参数，对实时性的要求也更高，因此，视频监控需要采用更加复杂的解决方案。<br><a id="more"></a></p>
-<h1 id="解码要求"><a href="#解码要求" class="headerlink" title="解码要求"></a>解码要求</h1><blockquote>
-<ol>
-<li>需要支持多种编码格式，如H.264, H.265,智能编码，SVC， 高帧率等。</li>
-<li>需要支持多种音频格式。</li>
-<li>需要支持多种分辨率， 高帧率等。</li>
-<li>对实时性要求更高。</li>
-</ol>
-</blockquote>
-<p>基于以上要求，采用FFMPEG + MSE 的综合解码方案。<br>原因如下：</p>
-<blockquote>
-<ol>
-<li>FFMPEG支持标准H264, H265解码，MSE仅支持H264。</li>
-<li>FFMPEG支持智能编码，MSE不支持。</li>
-<li>js解码能力较弱，在高分辨率时很容易碰到性能瓶颈，故采用MSE作为高分辨率时的解码方案。</li>
-<li>FFMPEG和MSE的实时性要求都比较好。</li>
-</ol>
-</blockquote>
-<p>对于音频，G711和G726采用window.AudioContext来进行处理，AAC同样使用MSE进行处理。</p>
-<h1 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h1><h2 id="FFMPEG"><a href="#FFMPEG" class="headerlink" title="FFMPEG"></a>FFMPEG</h2><p>FFMPEG是用来处理音视频数据的一套开源程序，应用广泛(事实上大部分编解码方案都基于ffmpeg)，使用<a href="http://www.ruanyifeng.com/blog/2017/09/asmjs_emscripten.html" target="_blank" rel="noopener">Emscripten</a>将FFMPEG源码转为asm.js，以供在web端进行视频解码。<br>不使用wasm的原因是因为其对浏览器版本要求较高，为了兼容性不得不做一些放弃。FFMPEG将视频数据转化为YUV格式，并使用WEBGL绘制。</p>
-<h2 id="MSE"><a href="#MSE" class="headerlink" title="MSE"></a>MSE</h2><p>Media Source Extensions（媒体源扩展 API）提供了实现无插件且基于 Web 的流媒体的功能。使用 MSE，媒体串流能够通过 JavaScript 创建，并且能通过使用 <code>&lt;audio&gt;</code> 和 <code>&lt;video&gt;</code> 元素进行播放。</p>
-<h2 id="方案选择"><a href="#方案选择" class="headerlink" title="方案选择"></a>方案选择</h2><p>使用FFMPEG时可以不使用缓存机制，因此对延时可以控制的更好。综合考虑FFMPEG在web端解码能力不足以及监控对实时性的要求，故采用如下方案：</p>
-<blockquote>
-<p>在低分辨率时(720P以及以下)，采用FFMPEG解码，做到极低的延时，300ms左右；在高分辨率时，采用MSE方式，将媒体数据组装为MP4，来播放视频, 此时延时在600-800ms左右，支持4K分辨率。<br>在H265模式下， 仅采用FFMPEG解码，一旦超出解码能力，则切换到辅码流（低分辨率）播放。<br>在智能编码开启时，仅使用FFMPEG解码，因为MSE不支持智能编码。</p>
-</blockquote>
-<p>在高分辨时，采用时域可分级的编码也可以采用丢帧策略，一方面保证视频能在web端正常播放，另一方面也不影响NVR等设备存储视频。</p>
-<h1 id="缓存控制"><a href="#缓存控制" class="headerlink" title="缓存控制"></a>缓存控制</h1><p>当每一帧数据处理完毕时，上一帧数据不一定播放完成，在这两帧的时间内(duration)，要将下一帧的数据保存起来，因此，要做一定的缓存控制。</p>
-<h2 id="FFMPEG-1"><a href="#FFMPEG-1" class="headerlink" title="FFMPEG"></a>FFMPEG</h2><p>通过FFMPEG解码后的YUV数据，先将其放到一段Buffer中，通过window.requestanimationframe接口来判断绘制下一帧的时机：</p>
+        <p>不同于普通的网站直播，视频监控领域的直播需要支持各种参数，对实时性的要求也更高，因此，视频监控需要采用更加复杂的解决方案。<br><a id="more"></a><br>考虑到部分内容涉及到未发布的项目，暂时隐藏，望谅解。</p>
+<!--解码要求
+=======
+
+>1. 需要支持多种编码格式，如H.264, H.265,智能编码，SVC， 高帧率等。
+>2. 需要支持多种音频格式。
+>3. 需要支持多种分辨率， 高帧率等。
+>4. 对实时性要求更高。
+
+基于以上要求，采用FFMPEG + MSE 的综合解码方案。
+原因如下：
+
+>1. FFMPEG支持标准H264, H265解码，MSE仅支持H264。
+>2. FFMPEG支持智能编码，MSE不支持。
+>3. js解码能力较弱，在高分辨率时很容易碰到性能瓶颈，故采用MSE作为高分辨率时的解码方案。
+>4. FFMPEG和MSE的实时性要求都比较好。
+
+对于音频，G711和G726采用window.AudioContext来进行处理，AAC同样使用MSE进行处理。
+
+具体实现
+=======
+
+FFMPEG
+-------
+FFMPEG是用来处理音视频数据的一套开源程序，应用广泛(事实上大部分编解码方案都基于ffmpeg)，使用[Emscripten](http://www.ruanyifeng.com/blog/2017/09/asmjs_emscripten.html)将FFMPEG源码转为asm.js，以供在web端进行视频解码。
+不使用wasm的原因是因为其对浏览器版本要求较高，为了兼容性不得不做一些放弃。FFMPEG将视频数据转化为YUV格式，并使用WEBGL绘制。
+
+MSE
+-------
+
+Media Source Extensions（媒体源扩展 API）提供了实现无插件且基于 Web 的流媒体的功能。使用 MSE，媒体串流能够通过 JavaScript 创建，并且能通过使用 `<audio>` 和 `<video>` 元素进行播放。
+
+方案选择
+-------
+使用FFMPEG时可以不使用缓存机制，因此对延时可以控制的更好。综合考虑FFMPEG在web端解码能力不足以及监控对实时性的要求，故采用如下方案：
+
+> 在低分辨率时(720P以及以下)，采用FFMPEG解码，做到极低的延时，300ms左右；在高分辨率时，采用MSE方式，将媒体数据组装为MP4，来播放视频, 此时延时在600-800ms左右，支持4K分辨率。
+> 在H265模式下， 仅采用FFMPEG解码，一旦超出解码能力，则切换到辅码流（低分辨率）播放。
+> 在智能编码开启时，仅使用FFMPEG解码，因为MSE不支持智能编码。
+
+在高分辨时，采用时域可分级的编码也可以采用丢帧策略，一方面保证视频能在web端正常播放，另一方面也不影响NVR等设备存储视频。
+
+缓存控制
+=======
+
+当每一帧数据处理完毕时，上一帧数据不一定播放完成，在这两帧的时间内(duration)，要将下一帧的数据保存起来，因此，要做一定的缓存控制。
+
+FFMPEG
+-------
+通过FFMPEG解码后的YUV数据，先将其放到一段Buffer中，通过window.requestanimationframe接口来判断绘制下一帧的时机：
+
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//currentTime表示当前帧时间戳，lastTime表示上一帧时间戳，duration为1000/帧率</span></span><br><span class="line"><span class="keyword">var</span> drawFrame = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(currentTime - lastTime &gt;= duration) &#123;</span><br><span class="line">        draw()<span class="comment">//绘制一帧</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">window</span>.requestanimationframe(drawFrame);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当两帧的时间戳插值大于等于duration时，表示该进行播放下一帧了。</p>
 <p>使用FFMPEG + WEBGL的方式，缓存仅有一次，即保存解码后的YUV数据，而使用MSE则有两次缓存。</p>
-<h2 id="MSE-1"><a href="#MSE-1" class="headerlink" title="MSE"></a>MSE</h2><h3 id="第一次缓存"><a href="#第一次缓存" class="headerlink" title="第一次缓存"></a>第一次缓存</h3><p>在sourceBuffer中，有一个updating事件，表示该对象正在更新，不能做appendBuffer操作，因此，当此时有数据需要缓存时，暂时将其放在一个buffer对象中：</p>
+<h2 id="MSE"><a href="#MSE" class="headerlink" title="MSE"></a>MSE</h2><h3 id="第一次缓存"><a href="#第一次缓存" class="headerlink" title="第一次缓存"></a>第一次缓存</h3><p>在sourceBuffer中，有一个updating事件，表示该对象正在更新，不能做appendBuffer操作，因此，当此时有数据需要缓存时，暂时将其放在一个buffer对象中：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">appendSegment</span>(<span class="params">mediaData</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(sourceBuffer == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(mediaSource.readyState === <span class="string">'closed'</span> || mediaSource.readyState === <span class="string">'ended'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(segmentBuffer.length &gt; <span class="number">0</span>) &#123; <span class="comment">//segmentBuffer长度大于0说明还有数据待放入sourceBuffer</span></span><br><span class="line">        segmentBuffer.push(mediaData);</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(!sourceBuffer.updating) &#123; <span class="comment">//sourceBuffer未处于更新状态时，将数据放到sourceBuffer中</span></span><br><span class="line">            sourceBuffer.appendBuffer(mediaData);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            segmentBuffer.push(mediaData); </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>何时取出？</p>
 <p>sourceBuffer有一个’update’事件，每更新一次后触发该事件，因此，可以在该事件的回调函数中将视频数据放入sourceBuffer，具体代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onSourceBufferUpdate</span>(<span class="params">mediaData</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(segmentBuffer.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(!sourceBuffer.updating) &#123;</span><br><span class="line">            sourceBuffer.appendBuffer(segmentBuffer.shift());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -435,7 +458,8 @@
 <p>此处采用了一分钟内触发5次waiting事件时，delay + 0.1 的处理方式。技术和经验有限，暂时还未找到更佳的处理方式。同时，delay只能动态增加，也不能做动态减少，希望以后能够找到好的处理方式来解决。</p>
 <p>经实测，使用上述延时优化策略，当网络状况良好时，在1080P-4K分辨率，25帧时，都仅需执行一次跳秒操作即可将延时降低到1s内。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>使用上述方式，基本上能涵盖视频监控领域大部分的情况。因技术有限，文章内难免有不足的地方，欢迎指正。</p>
-
+<p>–&gt;</p>
+-->
       
     </div>
     
@@ -487,9 +511,9 @@
           
             <a href="/tags/H264/" rel="tag"><i class="fa fa-tag"></i>H264</a>
           
-            <a href="/tags/高清/" rel="tag"><i class="fa fa-tag"></i>高清</a>
-          
             <a href="/tags/视频/" rel="tag"><i class="fa fa-tag"></i>视频</a>
+          
+            <a href="/tags/高清/" rel="tag"><i class="fa fa-tag"></i>高清</a>
           
         </div>
       
@@ -566,17 +590,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -640,22 +655,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#解码要求"><span class="nav-number">1.</span> <span class="nav-text">解码要求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#具体实现"><span class="nav-number">2.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FFMPEG"><span class="nav-number">2.1.</span> <span class="nav-text">FFMPEG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MSE"><span class="nav-number">2.2.</span> <span class="nav-text">MSE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案选择"><span class="nav-number">2.3.</span> <span class="nav-text">方案选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缓存控制"><span class="nav-number">3.</span> <span class="nav-text">缓存控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FFMPEG-1"><span class="nav-number">3.1.</span> <span class="nav-text">FFMPEG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MSE-1"><span class="nav-number">3.2.</span> <span class="nav-text">MSE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一次缓存"><span class="nav-number">3.2.1.</span> <span class="nav-text">第一次缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二次缓存"><span class="nav-number">3.2.2.</span> <span class="nav-text">第二次缓存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#延时优化"><span class="nav-number">4.</span> <span class="nav-text">延时优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
